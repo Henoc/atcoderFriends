@@ -1,1 +1,2 @@
 # atcoderFriends
+すべてwiki参照.

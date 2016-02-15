@@ -9,6 +9,7 @@ import static java.lang.Double.parseDouble;
 import static java.lang.Integer.MAX_VALUE;
 
 /**
+ * 20点取ったやつ
  * Created by heno on 2016/02/12.
  */
 public class Cj {
