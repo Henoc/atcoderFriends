@@ -11,20 +11,18 @@ import java.util.InputMismatchException;
 import static java.lang.Double.parseDouble;
 import static java.lang.Integer.MAX_VALUE;
 
-/**
- * WA になるやつ
- * 適当な頂点を始点としてそこからdfsして長いやつ2つが答え なのでは...
- * Created by heno on 2016/02/19.
- */
+
 public class C {
   static InputReader in = new InputReader(System.in);
   static PrintWriter out = new PrintWriter(System.out);
   static final int INF = MAX_VALUE / 10;
   static final double EPS = 1e-10;
+  static int farthestVertex, farthestDist;
+  static Edge[] edges;
 
   public static void main(String[] args) {
     int N = ni();
-    Edge[] edges = new Edge[N];
+    edges = new Edge[N];
     for (int i = 0; i < N; i++) {
       edges[i] = new Edge();
     }
@@ -34,43 +32,28 @@ public class C {
       edges[b].list.add(a);
     }
 
-    ArrayList<Ret> rets = new ArrayList<>();
-    rets.add(new Ret(0,0));
-    for(int to : edges[0].list){
-      Ret tmp = dfs(0,to,edges);
-      tmp.dist++;
-      rets.add(tmp);
-    }
-    Collections.sort(rets);
-    out.println((rets.get(0).v + 1) + " " + (rets.get(1).v + 1));
+    farthestVertex = -1;
+    farthestDist = 0;
+    dfs(0, -1, 0);
+    int v1 = farthestVertex;
+    farthestVertex = -1;
+    farthestDist = 0;
+    dfs(v1, -1, 0);
+    int v2 = farthestVertex;
+    out.println((v1 + 1) + " " + (v2 + 1));
 
     out.flush();
   }
 
-  static Ret dfs(int pre, int x, Edge[] edges) {
-    Ret far = new Ret(x,0);
-    for(int to : edges[x].list){
-      if(to == pre) continue;
-      Ret tmp = dfs(x,to,edges);
-      tmp.dist++;
-      if(tmp.dist > far.dist){
-        far = tmp;
-      }
+  // farthestDist, farthestVertex を書き換える
+  static void dfs(int x, int pre, int dist) {
+    if(farthestDist < dist){
+      farthestDist = dist;
+      farthestVertex = x;
     }
-    return far;
-  }
-
-  static class Ret implements Comparable<Ret> {
-    int v, dist;
-    Ret(int v, int dist){
-      this.v = v;
-      this.dist = dist;
-    }
-
-    @Override
-    public int compareTo(Ret o) {
-      //降順
-      return -(dist - o.dist);
+    for(int e : edges[x].list){
+      if(pre == e) continue;
+      dfs(e, x, dist + 1);
     }
   }
 
